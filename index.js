@@ -1,12 +1,17 @@
-// TODO: Include packages needed for this application
+// Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
+const util = require('util');
+const generateM = require('./utils/generateMarkdown')
 
-// TODO: Create an array of questions for user input
+// Create writeFile function using promises instead of a callback function
+const writeFileAsync = util.promisify(fs.writeFile);
+
+// Create an array of questions for user input
 const questions = [
     {
         type: 'input',
-        name: 'comments',
+        name: 'project_name',
         message: 'Name Of Your Project',
     }, 
     {
@@ -22,12 +27,18 @@ const questions = [
     {
         type: 'input',
         name: 'usage',
-        message: 'Do you have any usage Instractions',
+        message: 'Provide Usage Instractions',
     },
     {
-        type: 'input',
+        type: 'editor',
         name: 'contributing',
-        message: 'Contributing',
+        message: 'How to Contribute',
+        validate: function (text) {
+            if (text.split('\n').length < 1) {
+                return 'Must be at least 1 lines.';
+            }
+            return true;
+        },
     },
     {
         type: 'input',
@@ -45,33 +56,22 @@ const questions = [
         message: 'Your Email Address',
     },
     {
-        type: 'checkbox',
-        message: 'What languages do you know?',
-        name: 'stack',
-        choices: ['HTML', 'CSS', 'JavaScript', 'MySQL'],
+        type: 'list',
+        message: 'Choose the license for your project.',
+        name: 'licenses',
+        choices: ['ISC', 'MIT', 'Apache 2.0', 'Boost 1.0','GPL 3.0'],
     }, 
-    {
-        type: 'editor',
-        name: 'bio',
-        message: 'Please write a short bio of at least 3 lines.',
-        validate: function (text) {
-          if (text.split('\n').length < 3) {
-            return 'Must be at least 3 lines.';
-          }
-    
-          return true;
-        },
-    }
 ];
-inquirer.prompt(questions).then((answers) => {
-    console.log('\nOrder receipt:');
-    console.log(JSON.stringify(answers, null, '  '));
-});
-// TODO: Create a function to write README file
-function writeToFile(fileName, data) {}
 
-// TODO: Create a function to initialize app
-function init() {}
+// Create a function to initialize app
+function init() {
+    inquirer.prompt(questions).then((answers) => 
+    writeFileAsync('README.md', generateM(answers)))
+    .then(() => console.log('Successfully created README.md'))
+    .catch((err) => console.error(err));
+}
 
 // Function call to initialize app
 init();
+
+
