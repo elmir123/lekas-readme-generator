@@ -52,4 +52,4 @@ The following image demonstrates the application's appearance:
 ![Readme File Generator Completed](./assets/images/readmegen-screenshot.png)
 
 To view the Demo Video use this link:
-./Video-of-readme-generator.mp4
+![Video Demo](./Video-of-readme-generator.mp4)
