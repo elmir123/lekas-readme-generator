@@ -51,9 +51,9 @@ ${answers.usage}
 \`\`\`
   
 ## Contributing
-\`\`\`md
+
 ${answers.contributing}
-\`\`\`
+
   
 ## Test
 \`\`\`md
